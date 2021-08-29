@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import { responseError } from './src/helpers/response.js'
 import fileUpload from 'express-fileupload'
 import path from 'path'
+import 'dotenv/config'
 
 // Router
 import userRouter from './src/routes/user.js'
@@ -19,7 +20,11 @@ const io = new Server(httpServer, {
     origin: '*'
   }
 })
-app.use(cors())
+const corsSetting = {
+  credentials: true,
+  origin: 'http://localhost:3000'
+}
+app.use(cors(corsSetting))
 app.use(morgan('dev'))
 app.use(Express.json())
 app.use(fileUpload())

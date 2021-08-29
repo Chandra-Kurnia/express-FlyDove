@@ -29,6 +29,19 @@ const registerFieldRules = () => [
     .withMessage('Your pasword must have number')
 ]
 
+const loginFieldRules = () => [
+  body('email')
+    .notEmpty()
+    .withMessage('Please insert your email')
+    .bail()
+    .isEmail()
+    .withMessage('Your email is invalid'),
+  body('password')
+    .notEmpty()
+    .withMessage('Please insert your password')
+]
+
 export default {
-  registerFieldRules
+  registerFieldRules,
+  loginFieldRules
 }
