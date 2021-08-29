@@ -4,6 +4,8 @@ import { createServer } from 'http'
 import cors from 'cors'
 import morgan from 'morgan'
 import { responseError } from './src/helpers/response.js'
+import fileUpload from 'express-fileupload'
+import path from 'path'
 
 // Router
 import userRouter from './src/routes/user.js'
@@ -19,11 +21,19 @@ const io = new Server(httpServer, {
 })
 app.use(cors())
 app.use(morgan('dev'))
+app.use(Express.json())
+app.use(fileUpload())
+app.use('/images', Express.static(path.resolve('./public/images/')))
+app.use('/avatar', Express.static(path.resolve('./public/avatars/')))
 
 // REST API
 app.use('/user', userRouter)
 
 // CHAT SERVER
+
+app.use('*', (req, res, next) => {
+  next(new Error('Endpoint Not Found'))
+})
 
 app.use((err, req, res, next) => {
   responseError(res, 'Error', 500, err.message, [])
