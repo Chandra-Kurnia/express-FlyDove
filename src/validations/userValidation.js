@@ -41,7 +41,17 @@ const loginFieldRules = () => [
     .withMessage('Please insert your password')
 ]
 
+const forgotPasswordFieldRules = () => [
+  body('email')
+    .notEmpty()
+    .withMessage('Please insert your email')
+    .bail()
+    .isEmail()
+    .withMessage('Your email is invalid')
+]
+
 export default {
   registerFieldRules,
-  loginFieldRules
+  loginFieldRules,
+  forgotPasswordFieldRules
 }

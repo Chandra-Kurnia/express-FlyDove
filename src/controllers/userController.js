@@ -1,7 +1,11 @@
 import { response, responseError } from '../helpers/response.js'
 import userModels from '../models/userModels.js'
 import bcrypt from 'bcrypt'
-import { genAccessToken } from '../helpers/jwt.js'
+import { genAccessToken, genForgotPasswordToken } from '../helpers/jwt.js'
+import sendEmailForgotPw from '../helpers/forgotpw.js'
+import { v4 as uuidv4 } from 'uuid'
+import path from 'path'
+import fs from 'fs'
 
 const register = async (req, res, next) => {
   try {
@@ -65,7 +69,74 @@ const login = async (req, res, next) => {
   }
 }
 
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body
+    const user = userModels.findUser(email)
+    if (user.length > 0) {
+      delete user[0].password
+      const forgotpasswordtoken = await genForgotPasswordToken({ ...user[0] }, { expiresIn: 60 * 60 })
+      sendEmailForgotPw(email, forgotpasswordtoken, user[0].name)
+    } else {
+      responseError(res, 'Error', 400, `can't find account with email : ${email} !`, [])
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
+const showUser = async (req, res, next) => {
+  try {
+    const { email } = req.params
+    const user = await userModels.findUser(email)
+    delete user[0].password
+    if (user.length > 0) {
+      response(res, 'Success', 200, 'Data successfully loaded', user[0])
+    } else {
+      responseError(res, 'Not Found', 404, 'User not found')
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
+const updateUser = async (req, res, next) => {
+  try {
+    const userId = 3
+    let data = req.body
+    const email = 'candrakurnia@gmail.com'
+
+    const user = await userModels.findUser(email)
+    console.log(user)
+    if (req.files) {
+      const filename = uuidv4() + path.extname(req.files.avatar.name)
+      const savePath = path.join(path.dirname(''), '/public/avatar', filename)
+      data = { ...data, avatar: `/public/avatars/${filename}` }
+      req.files.avatar.mv(savePath)
+      if (user[0].avatar !== '/public/avatar/user.png') {
+        fs.unlink(`./${user[0].avatar}`, (err) => {
+          if (err) {
+            responseError(res, 'Error', 500, 'Error manage image', err)
+          }
+        })
+      }
+    }
+    userModels.updateUser(data, userId)
+      .then(() => {
+        response(res, 'Success', 200, 'Update profile successfull', data)
+      })
+      .catch((err) => {
+        responseError(res, 'Error', 500, 'Failed update profile, please try again later', err)
+      })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export default {
   register,
-  login
+  login,
+  forgotPassword,
+  showUser,
+  updateUser
 }

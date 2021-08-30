@@ -15,7 +15,14 @@ const findUser = (email) =>
     })
   })
 
+const updateUser = (data, userId) => new Promise((resolve, reject) => {
+  connection.query('update users set ? where user_id = ?', [data, userId], (err, result) => {
+    promiseResolveReject(resolve, reject, err, result)
+  })
+})
+
 export default {
   register,
-  findUser
+  findUser,
+  updateUser
 }

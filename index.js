@@ -23,6 +23,7 @@ const io = new Server(httpServer, {
 const corsSetting = {
   credentials: true,
   origin: 'http://localhost:3000'
+  // origin: '*'
 }
 app.use(cors(corsSetting))
 app.use(morgan('dev'))
@@ -35,6 +36,18 @@ app.use('/avatar', Express.static(path.resolve('./public/avatars/')))
 app.use('/user', userRouter)
 
 // CHAT SERVER
+io.on('connection', (socket) => {
+  console.log('Someone online')
+  console.log(socket.id)
+
+  socket.on('sendmsg', (msg) => {
+    io.emit('msgFromBackEnd', msg)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('someone offline')
+  })
+})
 
 app.use('*', (req, res, next) => {
   next(new Error('Endpoint Not Found'))
