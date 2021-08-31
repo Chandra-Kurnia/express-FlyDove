@@ -133,10 +133,16 @@ const updateUser = async (req, res, next) => {
   }
 }
 
+const checktoken = async (req, res, next) => {
+  const dataUser = req.userLogin
+  response(res, 'Success', 200, 'User is valid', dataUser)
+}
+
 export default {
   register,
   login,
   forgotPassword,
   showUser,
-  updateUser
+  updateUser,
+  checktoken
 }

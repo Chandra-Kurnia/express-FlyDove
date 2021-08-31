@@ -10,6 +10,7 @@ import 'dotenv/config'
 
 // Router
 import userRouter from './src/routes/user.js'
+import messageRouter from './src/routes/message.js'
 
 // Configuration
 const port = process.env.API_PORT || 4000
@@ -34,6 +35,7 @@ app.use('/avatar', Express.static(path.resolve('./public/avatars/')))
 
 // REST API
 app.use('/user', userRouter)
+app.use('/messages', messageRouter)
 
 // CHAT SERVER
 io.on('connection', (socket) => {
@@ -41,7 +43,8 @@ io.on('connection', (socket) => {
   console.log(socket.id)
 
   socket.on('sendmsg', (msg) => {
-    io.emit('msgFromBackEnd', msg)
+    console.log(msg)
+    io.emit('msgFromBackEnd', msg.message)
   })
 
   socket.on('disconnect', () => {
