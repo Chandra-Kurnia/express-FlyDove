@@ -3,7 +3,8 @@ import messageModels from '../models/messageModels.js'
 
 const sendMessage = (req, res, next) => {
   const data = req.body
-  messageModels.sendMessage(data)
+  messageModels
+    .sendMessage(data)
     .then(() => {
       response(res, 'Success', 200, 'Message succesfully stored')
     })
@@ -20,7 +21,10 @@ const getMessage = async (req, res, next) => {
     if (messages.length > 0) {
       response(res, 'success', 200, 'All messages successfully loaded', messages)
     } else {
-      response(res, 'No message', 200, 'Message not found', [])
+      response(res, 'No message', 200, 'Message not found', [
+        { message: 'You dont have chat with this user', sender_id: userId },
+        { message: 'Say hi!, and start messaging :D', sender_id: userId }
+      ])
     }
   } catch (err) {
     next(err)

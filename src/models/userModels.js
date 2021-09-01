@@ -15,8 +15,21 @@ const findUser = (email) =>
     })
   })
 
+const findbyid = (id) =>
+  new Promise((resolve, reject) => {
+    connection.query(`SELECT * FROM users WHERE user_id = '${id}'`, (err, result) => {
+      promiseResolveReject(resolve, reject, err, result)
+    })
+  })
+
 const updateUser = (data, userId) => new Promise((resolve, reject) => {
   connection.query('update users set ? where user_id = ?', [data, userId], (err, result) => {
+    promiseResolveReject(resolve, reject, err, result)
+  })
+})
+
+const getAllUser = (userId) => new Promise((resolve, reject) => {
+  connection.query(`select * from users except select * from users where user_id = ${userId}`, (err, result) => {
     promiseResolveReject(resolve, reject, err, result)
   })
 })
@@ -24,5 +37,7 @@ const updateUser = (data, userId) => new Promise((resolve, reject) => {
 export default {
   register,
   findUser,
-  updateUser
+  updateUser,
+  getAllUser,
+  findbyid
 }
