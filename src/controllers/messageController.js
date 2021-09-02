@@ -22,8 +22,8 @@ const getMessage = async (req, res, next) => {
       response(res, 'success', 200, 'All messages successfully loaded', messages)
     } else {
       response(res, 'No message', 200, 'Message not found', [
-        { message: 'You dont have chat with this user', sender_id: userId },
-        { message: 'Say hi!, and start messaging :D', sender_id: userId }
+        // { message: 'You dont have chat with this user', sender_id: userId },
+        // { message: 'Say hi!, and start messaging :D', sender_id: userId }
       ])
     }
   } catch (err) {
@@ -31,7 +31,19 @@ const getMessage = async (req, res, next) => {
   }
 }
 
+const deleteMessage = (req, res, next) => {
+  const messageId = req.params.id
+  messageModels.deleteMessage(messageId)
+    .then(() => {
+      response(res, 'Success', 200, 'Message successsfully deleted')
+    })
+    .catch((err) => {
+      responseError(res, 'Error', 500, 'Failed deleted message', err)
+    })
+}
+
 export default {
   sendMessage,
-  getMessage
+  getMessage,
+  deleteMessage
 }

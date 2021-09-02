@@ -76,17 +76,33 @@ io.on('connection', (socket) => {
       recipient_id: data.recipient_id,
       message: data.message
     }
-    cb({
-      sender_id: socket.user_id,
-      message: data.message,
-      time: new Date()
-    })
-    messageModels.sendMessage(dataMsg)
+    messageModels
+      .sendMessage(dataMsg)
       .then(() => {
-        socket.broadcast.to(data.recipient_id).emit('msgFromBackEnd', { message: data.message, time: new Date(), sender_id: socket.user_id })
+        messageModels.lastSend(socket.user_id).then((res) => {
+          const MsgId = res[0].latest
+          cb({
+            recipient_id: data.recipient_id,
+            sender_id: socket.user_id,
+            message: data.message,
+            time: new Date(),
+            message_id: MsgId
+          })
+          socket.broadcast
+            .to(data.recipient_id)
+            .emit('msgFromBackEnd', {
+              message: data.message,
+              time: new Date(),
+              sender_id: socket.user_id,
+              sender_name: data.sender_name,
+              message_id: MsgId
+            })
+        })
       })
       .catch(() => {
-        socket.broadcast.to(data.recipient_id).emit('msgFromBackEnd', { message: 'message invalid', time: new Date(), sender_id: socket.user_id })
+        socket.broadcast
+          .to(data.recipient_id)
+          .emit('msgFromBackEnd', { message: 'message invalid', time: new Date(), sender_id: socket.user_id })
       })
   })
 

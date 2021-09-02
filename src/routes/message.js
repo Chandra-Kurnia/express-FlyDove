@@ -6,5 +6,6 @@ const router = Express.Router()
 
 router.post('/send', messageController.sendMessage)
   .get('/getmessages/:recipientId', Auth, messageController.getMessage)
+  .delete('/delete/:id', messageController.deleteMessage)
 
 export default router

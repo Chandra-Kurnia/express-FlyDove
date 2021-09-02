@@ -127,6 +127,11 @@ const updateUser = async (req, res, next) => {
 
     const user = await userModels.findUser(email)
     if (req.files) {
+      if (req.files.avatar.mimetype !== 'image/jpeg' && req.files.avatar.mimetype !== 'image/png') {
+        return responseError(res, 'Wrong extension', 400, 'Only jpg/jpeg/png is allowed', [])
+      } else if (req.files.avatar.size > 1048576 * 2) {
+        return responseError(res, 'Too large', 400, 'Max file size is 5 megabyte', [])
+      }
       const filename = uuidv4() + path.extname(req.files.avatar.name)
       const savePath = path.join(path.dirname(''), '/public/avatar', filename)
       data = { ...data, avatar: `/avatar/${filename}` }
@@ -189,6 +194,26 @@ const logout = async (req, res, next) => {
   }
 }
 
+const getUserInchat = async (req, res, next) => {
+  try {
+    const userLoginId = req.userLogin.user_id
+    const users = await userModels.getAllUser(userLoginId)
+    const allUserId = users.map((user) => user.user_id)
+    const promiseUserWithLastMessage = await allUserId.map(async (userId) => {
+      // return 'hahahahahah'
+      const res = await userModels.getUserInchat(1, userId)
+      // console.log(res)
+      return res[0]
+    })
+    const allUserWithLastMessage = await Promise.all(promiseUserWithLastMessage)
+    response(res, 'Success', 200, 'All data users successfully loaded', allUserWithLastMessage)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// select name as sender, (select name from users where user_id = recipient_id) as recipient, message, time from users inner join messages on users.user_id = messages.sender_id or users.user_id = messages.recipient_id where (user_id = 1 and recipient_id = 6) or (user_id = 6 and recipient_id = 1) order by time desc;
+
 export default {
   register,
   login,
@@ -198,5 +223,6 @@ export default {
   checktoken,
   getalluser,
   showUserbyid,
-  logout
+  logout,
+  getUserInchat
 }

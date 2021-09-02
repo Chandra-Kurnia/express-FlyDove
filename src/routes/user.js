@@ -15,5 +15,6 @@ router.post('/register', userValidaton.registerFieldRules(), resultValidation, u
   .get('/checktoken', Auth, userController.checktoken)
   .get('/getallusers', Auth, userController.getalluser)
   .get('/logout', userController.logout)
+  .get('/userinchat', Auth, userController.getUserInchat)
 
 export default router
