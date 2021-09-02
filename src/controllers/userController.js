@@ -200,7 +200,7 @@ const getUserInchat = async (req, res, next) => {
     const users = await userModels.getAllUser(userLoginId)
     const allUserId = users.map((user) => user.user_id)
     const promiseUserWithLastMessage = await allUserId.map(async (userId) => {
-      const res = await userModels.getUserInchat(1, userId)
+      const res = await userModels.getUserInchat(userLoginId, userId)
       return res[0]
     })
     const allUserWithLastMessage = await Promise.all(promiseUserWithLastMessage)
