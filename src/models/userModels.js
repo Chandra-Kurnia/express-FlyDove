@@ -22,23 +22,32 @@ const findbyid = (id) =>
     })
   })
 
-const updateUser = (data, userId) => new Promise((resolve, reject) => {
-  connection.query('update users set ? where user_id = ?', [data, userId], (err, result) => {
-    promiseResolveReject(resolve, reject, err, result)
+const updateUser = (data, userId) =>
+  new Promise((resolve, reject) => {
+    connection.query('update users set ? where user_id = ?', [data, userId], (err, result) => {
+      promiseResolveReject(resolve, reject, err, result)
+    })
   })
-})
 
-const getAllUser = (userId) => new Promise((resolve, reject) => {
-  connection.query(`select * from users except select * from users where user_id = ${userId}`, (err, result) => {
-    promiseResolveReject(resolve, reject, err, result)
+const getAllUser = (userId, keyword = '') =>
+  new Promise((resolve, reject) => {
+    connection.query(
+      `select * from users where username like '%k${keyword}%' OR name like '%${keyword}%' except select * from users where user_id = ${userId}`,
+      (err, result) => {
+        promiseResolveReject(resolve, reject, err, result)
+      }
+    )
   })
-})
 
-const getUserInchat = (userLoginId, userId) => new Promise((resolve, reject) => {
-  connection.query(`select (select user_id from users where user_id = ${userId}) as user_id, (select avatar from users where user_id = ${userId}) as avatar, (select name from users where user_id = ${userId}) as name, (select username from users where user_id = ${userId}) as username, (select online from users where user_id = ${userId}) as online, (select count(*) from messages where (sender_id = ${userLoginId} and recipient_id = ${userId} and unread = 1) or (sender_id = ${userId} and recipient_id = ${userLoginId} and unread = 1)) as unread, message, time from messages where (sender_id = ${userLoginId} and recipient_id = ${userId}) or (sender_id = ${userId} and recipient_id = ${userLoginId}) order by time desc limit 1`, (err, result) => {
-    promiseResolveReject(resolve, reject, err, result)
+const getUserInchat = (userLoginId, userId) =>
+  new Promise((resolve, reject) => {
+    connection.query(
+      `select (select user_id from users where user_id = ${userId}) as user_id, (select avatar from users where user_id = ${userId}) as avatar, (select name from users where user_id = ${userId}) as name, (select username from users where user_id = ${userId}) as username, (select online from users where user_id = ${userId}) as online, (select count(*) from messages where (sender_id = ${userLoginId} and recipient_id = ${userId} and unread = 1) or (sender_id = ${userId} and recipient_id = ${userLoginId} and unread = 1)) as unread, message, time from messages where (sender_id = ${userLoginId} and recipient_id = ${userId}) or (sender_id = ${userId} and recipient_id = ${userLoginId}) order by time desc limit 1`,
+      (err, result) => {
+        promiseResolveReject(resolve, reject, err, result)
+      }
+    )
   })
-})
 
 export default {
   register,

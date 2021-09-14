@@ -174,7 +174,8 @@ const checktoken = async (req, res, next) => {
 const getalluser = async (req, res, next) => {
   try {
     const userId = req.userLogin.user_id
-    const dataUser = await userModels.getAllUser(userId)
+    const keyword = req.query.keyword
+    const dataUser = await userModels.getAllUser(userId, keyword)
     if (dataUser.length > 0) {
       response(res, 'Success', 200, 'All data users successfully loaded', dataUser)
     } else {
