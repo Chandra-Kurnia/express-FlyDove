@@ -16,7 +16,7 @@ import userRouter from './src/routes/user.js'
 import messageRouter from './src/routes/message.js'
 
 // Configuration
-const port = process.env.API_PORT || 4000
+const port = process.env.PORT || 4000
 const app = Express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
