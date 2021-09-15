@@ -46,13 +46,13 @@ const login = async (req, res, next) => {
             delete user[0].password
             const accesstoken = await genAccessToken({ ...user[0] }, { expiresIn: 60 * 60 })
             user[0].token = accesstoken
-            res.cookie('token', accesstoken, {
-              httpOnly: true,
-              // maxAge: 60 * 60 * 60,
-              secure: true,
-              path: '/',
-              sameSite: 'strict'
-            })
+            // res.cookie('token', accesstoken, {
+            //   httpOnly: true,
+            //   // maxAge: 60 * 60 * 60,
+            //   secure: true,
+            //   path: '/',
+            //   sameSite: 'strict'
+            // })
             response(res, 'Success', 200, 'Login successfull', user[0])
           } else {
             responseError(res, 'wrong password', 400, 'Your password  is wrong', [])
