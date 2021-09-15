@@ -26,9 +26,9 @@ const io = new Server(httpServer, {
 })
 const corsSetting = {
   credentials: true,
-  // origin: 'https://skydove.vercel.app'
+  origin: 'https://skydove.vercel.app'
   // origin: 'https://6140bf8f35ec7e6018886ce8--stoic-booth-1cd8c1.netlify.app'
-  origin: 'http://localhost:3000'
+  // origin: 'http://localhost:3000'
   // origin: '*'
 }
 app.use(cors(corsSetting))
@@ -70,7 +70,7 @@ io.use((socket, next) => {
 })
 
 io.on('connection', (socket) => {
-  console.log(`Someone online with socket id : ${socket.id}`)
+  console.log(`User id = ${socket.user_id} online with socket id : ${socket.id}`)
 
   socket.on('sendmsg', (data, cb) => {
     const dataMsg = {

@@ -207,6 +207,7 @@ const getUserInchat = async (req, res, next) => {
     const allUserWithLastMessage = await Promise.all(promiseUserWithLastMessage)
     response(res, 'Success', 200, 'All data users successfully loaded', allUserWithLastMessage)
   } catch (error) {
+    console.log(error)
     next(error)
   }
 }

@@ -32,7 +32,8 @@ const updateUser = (data, userId) =>
 const getAllUser = (userId, keyword = '') =>
   new Promise((resolve, reject) => {
     connection.query(
-      `select * from users where username like '%k${keyword}%' OR name like '%${keyword}%' except select * from users where user_id = ${userId}`,
+      // `select * from users where username like '%${keyword}%' OR name like '%${keyword}%' except (select * from users where user_id = ${userId})`,
+      `select * from users where (user_id not in (select user_id from users where user_id = ${userId})) and (username like '%${keyword}%' or name like '%${keyword}%')`,
       (err, result) => {
         promiseResolveReject(resolve, reject, err, result)
       }
