@@ -26,8 +26,8 @@ const io = new Server(httpServer, {
 })
 const corsSetting = {
   credentials: true,
-  origin: 'https://skydove.vercel.app'
-  // origin: 'https://6140bf8f35ec7e6018886ce8--stoic-booth-1cd8c1.netlify.app'
+  // origin: 'https://skydove.vercel.app'
+  origin: 'https://stoic-booth-1cd8c1.netlify.app'
   // origin: 'http://localhost:3000'
   // origin: '*'
 }
