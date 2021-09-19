@@ -44,7 +44,7 @@ const login = async (req, res, next) => {
         if (!err) {
           if (result) {
             delete user[0].password
-            const accesstoken = await genAccessToken({ ...user[0] }, { expiresIn: 60 * 60 })
+            const accesstoken = await genAccessToken({ ...user[0] }, { expiresIn: 60 * 60 * 60 })
             user[0].token = accesstoken
             // res.cookie('token', accesstoken, {
             //   httpOnly: true,
@@ -120,7 +120,6 @@ const updateUser = async (req, res, next) => {
     const userId = req.userLogin.user_id
     const email = req.userLogin.email
     let data = req.body
-
     if (data.avatar === '') {
       delete data.avatar
     }
@@ -129,7 +128,7 @@ const updateUser = async (req, res, next) => {
     if (req.files) {
       if (req.files.avatar.mimetype !== 'image/jpeg' && req.files.avatar.mimetype !== 'image/png') {
         return responseError(res, 'Wrong extension', 400, 'Only jpg/jpeg/png is allowed', [])
-      } else if (req.files.avatar.size > 1048576 * 2) {
+      } else if (req.files.avatar.size > 1048576 * 5) {
         return responseError(res, 'Too large', 400, 'Max file size is 5 megabyte', [])
       }
       const filename = uuidv4() + path.extname(req.files.avatar.name)
@@ -144,7 +143,8 @@ const updateUser = async (req, res, next) => {
         })
       }
     }
-    userModels.updateUser(data, userId)
+    userModels
+      .updateUser(data, userId)
       .then(async () => {
         const userAfterUpdate = await userModels.findUser(email)
         delete userAfterUpdate[0].password
@@ -162,6 +162,7 @@ const updateUser = async (req, res, next) => {
         responseError(res, 'Error', 500, 'Failed update profile, please try again later', err)
       })
   } catch (err) {
+    console.log(err)
     next(err)
   }
 }
@@ -205,6 +206,7 @@ const getUserInchat = async (req, res, next) => {
       return res[0]
     })
     const allUserWithLastMessage = await Promise.all(promiseUserWithLastMessage)
+    allUserWithLastMessage.sort((a, b) => (a.time > b.time ? 1 : b.time > a.time ? -1 : 0))
     response(res, 'Success', 200, 'All data users successfully loaded', allUserWithLastMessage)
   } catch (error) {
     console.log(error)
