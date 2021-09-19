@@ -206,7 +206,7 @@ const getUserInchat = async (req, res, next) => {
       return res[0]
     })
     const allUserWithLastMessage = await Promise.all(promiseUserWithLastMessage)
-    allUserWithLastMessage.sort((a, b) => (a.time > b.time ? 1 : b.time > a.time ? -1 : 0))
+    allUserWithLastMessage.sort((a, b) => (a.time < b.time ? 1 : b.time < a.time ? -1 : 0))
     response(res, 'Success', 200, 'All data users successfully loaded', allUserWithLastMessage)
   } catch (error) {
     console.log(error)
