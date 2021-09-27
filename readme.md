@@ -5,13 +5,13 @@
 </div>
   <h3 align="center">Backend FlyDove</h3>
   <p align="center">
-    <a href="https://github.com/Chandra-Kurnia/express-telegram"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Chandra-Kurnia/express-FlyDove"><strong>Explore the docs »</strong></a>
     <br />
     <a href="https://flydove.vercel.app/">View Demo</a>
     ·
-    <a href="https://github.com/Chandra-Kurnia/express-telegram">Report Bug</a>
+    <a href="https://github.com/Chandra-Kurnia/express-FlyDove">Report Bug</a>
     ·
-    <a href="https://github.com/Chandra-Kurnia/express-telegram">Request Feature</a>
+    <a href="https://github.com/Chandra-Kurnia/express-FlyDove">Request Feature</a>
   </p>
 </p>
 
@@ -66,7 +66,7 @@ This is an example of how to list things you need to use the software and how to
 
 - Clone This Back End Repo
 ```
-git clone https://github.com/Chandra-Kurnia/express-telegram.git
+git clone https://github.com/Chandra-Kurnia/express-FlyDove.git
 ```
 - Go To Folder Repo
 ```
@@ -127,7 +127,7 @@ Contributions are what make the open source community such an amazing place to b
 
 
 ## Related Project
-:rocket: [`Backend FlyDove`](https://github.com/Chandra-Kurnia/express-telegram)
+:rocket: [`Backend FlyDove`](https://github.com/Chandra-Kurnia/express-FlyDove)
 
 :rocket: [`Frontend FlyDove`](https://github.com/Chandra-Kurnia/nextjs-telegram)
 
@@ -138,7 +138,7 @@ Contributions are what make the open source community such an amazing place to b
 
 My Email : candrakurniawan.dev@gmail.com
 
-Project Link: [https://github.com/Chandra-Kurnia/express-telegram](https://github.com/Chandra-Kurnia/express-telegram)
+Project Link: [https://github.com/Chandra-Kurnia/express-FlyDove](https://github.com/Chandra-Kurnia/express-FlyDove)
 
 
 
